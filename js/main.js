@@ -11,6 +11,8 @@
 	var goalPieChart = {}
 
 	var csvData = {};
+	var teamNames = [];
+	var teamActivity = [];
 
     //get canvas element contexts
     function getCanvasContexts(){
@@ -21,28 +23,40 @@
     	Papa.parse(csvDocumentPath, {
     	                download: true,
     	                header: true,
+			skipEmptyLines: true,
                       	complete: function(results) {
                       		csvData = results.data;
-                      		console.log(csvData);
+                      		csvData.forEach(pushTeamName);
+                      		csvData.forEach(pushTeamActivity);
+							setChartSize();
                       	}
                       });
+    }
+
+    function pushTeamName(element, index, array) {
+        teamNames.push(element.TeamName1);
+    }
+
+    function pushTeamActivity(element, index, array) {
+        var stat = parseInt(element.Textbox161.replace(/,/g,''));
+        teamActivity.push(stat);
     }
 
     function getTeamNames(){
 
     }
 
-	//team standings bar chart data
+    //team standings bar chart data
     var teamStandingsData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: teamNames,
         datasets: [
             {
-                label: "Team Standings",//get team names
+                label: "Team Standings",
                 fillColor: "rgba(159, 207, 103,0.5)",
                 strokeColor: "rgba(159, 207, 103,0.8)",
                 highlightFill: "rgba(159, 207, 103,0.75)",
                 highlightStroke: "rgba(159, 207, 103,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]//get team activity minutes
+                data: teamActivity
             },
             ]
     };
@@ -70,6 +84,5 @@
      getCanvasContexts();
 
 	teamStandingsChart = new Chart(standingsContext).Bar(teamStandingsData);
-
-	setChartSize();
 	});
+
