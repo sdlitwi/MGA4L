@@ -3,10 +3,8 @@
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-
-.jumbotron { height:750px; }
-#jumbotron_container {height:700px}
-
+.jumbotron{background-color:white}
+#jumbotron_container {background-color:white;min-height:600px}
 
 
 
